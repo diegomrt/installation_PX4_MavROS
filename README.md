@@ -8,11 +8,13 @@ The new Hardware Abstraction Layer (HAL) for working in robotic applications for
 
 # Installation instructions
 
-Please follow the next steps to install the complete JdeRobot UAVs HAL:
+You can use [this bash script](https://raw.githubusercontent.com/PX4/Devguide/master/build_scripts/ubuntu_sim_ros_gazebo.sh) for from [dev.px4.io](https://dev.px4.io/en/setup/dev_env_linux.html#gazebo-with-ros) for setting up ROS Kinetic/Gazebo + PX4 + MavROS on Ubuntu 16.04 (Xenial). It also installs some common dependencies libraries and tools 
+
+Alternatively, it can be done step by step:
 
 ## ROS Kinetic and Gazebo 7
 
-ROS must be already installed before continuing. Please follow [the official instructions](http://wiki.ros.org/kinetic/Installation/Ubuntu) to install ROS Kinetic (that includes Gazebo 7 by default) in Ubuntu 16.04 (Xenial)
+ROS must be installed first. Please follow [the official instructions](http://wiki.ros.org/kinetic/Installation/Ubuntu) to install ROS Kinetic (that includes Gazebo 7 by default) in Ubuntu 16.04 (Xenial)
 
 ## MavROS
 
@@ -20,40 +22,59 @@ Install MavROS package and its required dependencies following [these installati
 
 ## PX4 SITL
 
-Download the last PX4 Firmware from its Github repository:
+Detailed instructions about the PX4 toolchain installation can be found [here](). In summary, you must first:
+* Remove the [Ubuntu modemmanager](https://dev.px4.io/en/setup/dev_env_linux_ubuntu.html#remove-the-modemmanager)
+* Install the [Common Dependencies](https://dev.px4.io/en/setup/dev_env_linux_ubuntu.html#common-dependencies)
+* Install the [Ninja Build System](https://dev.px4.io/en/setup/dev_env_linux_ubuntu.html#ninja-build-system)
+* Install [FastRTPS](https://dev.px4.io/en/setup/dev_env_linux_ubuntu.html#fastrtps-installation)
+
+After that, download the last PX4 Firmware from its Github repository:
 
 ```sh
 git clone https://github.com/PX4/Firmware.git 
 ```
 
-*To be completed*
+Build the PX4 stack for SITL in Gazebo. You can find more info about building PX4 for different boards, models and variants [here](https://dev.px4.io/en/setup/building_px4.html#make_targets). 
 
 ```sh
-cd <Firmware_clone>
+cd <Firmware>
 make px4_sitl_default gazebo
-source ~/catkin_ws/devel/setup.bash    // (optional)
 source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
 ```
 
-*To be completed: modifications to add front camera*
-
 ## PX4 SITL + MavROS launch files
 
-Default launch file for PX4 SITL + MavROS + Gazebo (included in the MavROS package):
+A default launch file for PX4 SITL + MavROS + Gazebo is included in the MavROS package: 
 
 ```sh
 roslaunch px4 mavros_posix_sitl.launch 
 ```
+It will load the default 3DR Iris model in Gazebo:
 
-*Update vehicle options (to be completed):*
+![3DR Iris](/images/3DR_Iris.jpg?raw=true)
+
+
+For launching the 3DR Solo model, use:
 
 ```sh
-roslaunch px4 mavros_px4sitl_camera.launch vehicle:=solo
-roslaunch px4 mavros_px4sitl_camera.launch vehicle:=iris model_name:=iris_fpv_cam
-roslaunch px4 mavros_px4sitl_camera.launch vehicle:=solo model_name:=solo
+roslaunch px4 mavros_posix_sitl.launch vehicle:=solo 
 ```
+
+![3DR Solo](/images/3DR_Solo.jpg?raw=true)
+
+## Adding a front camera to the simulated model
+
+If you need to simulate a quadcopter with front RGB camera, you can launch the iris_fpv_cam model 
+
+```sh
+roslaunch px4 mavros_posix_sitl.launch vehicle:=iris_fpv_cam
+```
+
+![3DR Iris FPV Cam](/images/3DR_Iris_fpvcam.jpg?raw=true)
+
+*Note: Sometimes there are some problems with launching the former vehicle, and Gazebo crashes. There is a solutoin that would be addressed in the near future. 
 
 ## Hardware compatibility
 

@@ -46,7 +46,7 @@ export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
 
 ## PX4 SITL + MavROS launch files
 
-A default launch file for PX4 SITL + MavROS + Gazebo is included in the MavROS package: 
+A default launch file for launching PX4 SITL + MavROS + Gazebo is included in the MavROS package: 
 
 ```sh
 roslaunch px4 mavros_posix_sitl.launch 
@@ -74,7 +74,7 @@ roslaunch px4 mavros_posix_sitl.launch vehicle:=iris_fpv_cam
 
 ![3DR Iris FPV Cam](/images/3DR_Iris_fpvcam.jpg?raw=true)
 
-*Note: Sometimes there are some problems with launching the former vehicle, and Gazebo crashes. There is a solutoin that would be addressed in the near future. 
+*Note: Sometimes there are problems with launching the former vehicle, and Gazebo crashes. There is already a solutionn that would be addressed here in the near future.* 
 
 ## Hardware compatibility
 
